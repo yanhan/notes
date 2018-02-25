@@ -2,11 +2,27 @@
 
 Notes on the `top` utility. This is for the Linux version; the Mac version is slightly different.
 
-## Top of the screen
 
-Load average values: 1 min, 5 min, 15 min. If load average is 1.00 and CPU has 1 core, server is at capacity. With 2 cores, server is at capacity when the number is 2.00. With 4 cores, this number should be 4.00. And so on.
+## Stuff you see at the top of the screen
 
-CPU percentage numbers:
+### Load average values
+
+The load average values are located at the top right corner of the screen. They look like the following:
+
+```
+load average: 0.45, 0.57, 0.62
+```
+
+These 3 numbers are the 1 min, 5 min and 15 min load average values respectively.
+
+**Simple way to interpret load averages:** If the load average is 1.00 and the CPU has 1 core, the server is at capacity. With 2 cores, server is at capacity when the number is 2.00. With 4 cores, this number should be 4.00. And so on.
+
+**Longer explanation:** Think of a CPU core as a road and a process as a car. If there is always 1 car on the road, the load average is 1.00. If there are 2 cars, then the load average is 2.00 and 1 car can be on the road while the other car has to wait for the road to be free. Hence load average is **very roughly** `number of process that need to run / number of CPU cores` and measures how overloaded a server is.
+
+**A simple rule of thumb:** If the 15 min load average exceeds 0.7 (after dividing by the number of CPU cores), then the server may be overloaded.
+
+### CPU percentage numbers
+
 - user time `(us)`
 - system time `(sys)`
 - time spent on low priority processes aka nice time `(ni)`
