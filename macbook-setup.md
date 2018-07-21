@@ -115,9 +115,14 @@ chmod 700 ./install-stack
 git clone git@github.com:olivierverdier/zsh-git-prompt.git
 cd zsh-git-prompt
 stack setup
-stack build && stack install
+stack build
+stack install
 ```
 
+
+## PostgreSQL
+
+Follow the instructions [here](/install-postgresql-on-mac.md)
 
 
 NOT DONE
