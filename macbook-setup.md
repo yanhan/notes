@@ -123,7 +123,3 @@ stack install
 ## PostgreSQL
 
 Follow the instructions [here](/install-postgresql-on-mac.md)
-
-
-NOT DONE
-- vim
