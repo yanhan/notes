@@ -14,14 +14,42 @@ In PostgreSQL, a `role` is equivalent to a user in MySQL.
 
 2. Install PostgreSQL
 
+For PostgreSQL 9.6:
+
+```
+brew install postgresql@9.6
+brew link -f postgresql@9.6
+```
+
+Then add the following to your PATH:
+
+``
+/usr/local/opt/postgresql@9.6/bin
+```
+
+Otherwise:
+
 ```
 brew install postgresql
 ```
 
 3. Run PostgreSQL and create a role for your user:
 
+If you are using PostgreSQL9.6, start PostgreSQL using:
+
+```
+postgres -D /usr/local/var/postgresql@9.6
+```
+
+Otherwise:
+
 ```
 postgres -D /usr/local/var/postgres
+```
+
+Then create a role with the same name as your UNIX username:
+
+```
 createdb `whoami`
 ```
 
@@ -74,7 +102,7 @@ psql
 
 4. (Optional) Enforce password login for PostgreSQL
 
-Modify `/usr/local/var/postgres/pg_hba.conf` so that the method is set to something other than `trust` for the relevant rows. My configuration looks something like:
+Modify `/usr/local/var/postgres/pg_hba.conf` (or `/usr/local/var/postgresql@9.6/pg_hba.conf`) so that the method is set to something other than `trust` for the relevant rows. My configuration looks something like:
 
 ```
 # TYPE  DATABASE         USER             ADDRESS                  METHOD
@@ -86,9 +114,10 @@ host    all              all              ::1/128                  md5
 
 So this new user `my_user` will need a password to access the db server.
 
-**NOTE:** If you made any changes to `/usr/local/var/postgres/pg_hba.conf`, remember to restart PostgreSQL.
+**NOTE:** If you made any changes to `/usr/local/var/postgres/pg_hba.conf` (or to `/usr/local/var/postgresql@9.6/pg_hba.conf`), remember to restart PostgreSQL.
 
 
 ## References
 
 - http://exponential.io/blog/2015/02/21/install-postgresql-on-mac-os-x-via-brew/
+- https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html
