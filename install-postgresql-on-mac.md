@@ -107,8 +107,9 @@ Modify `/usr/local/var/postgres/pg_hba.conf` (or `/usr/local/var/postgresql@9.6/
 ```
 # TYPE  DATABASE         USER             ADDRESS                  METHOD
 local   all              postgres                                  trust
-local   all              all                                       md5
+local   all              YOUR_UNIX_USER                            trust
 host    all              all              127.0.0.1/32             md5
+host    all              all              0.0.0.0/0                reject
 host    all              all              ::1/128                  md5
 ```
 
