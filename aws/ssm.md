@@ -1,0 +1,63 @@
+# About
+
+AWS Systems Manager.
+
+Purpose: Enables automated configuration and ongoing management of systems at scale.
+
+## Preliminaries
+
+- Agent based.
+- Comes pre-installed with Amazon Linux. Just do a `ps aux` and grep for `amazon-ssm-agent`.
+  - Also supports other Linux and Windows.
+  - Works for on-prem too.
+  - For instances that don't have the agent, we will need to install it.
+    - GitHub: https://github.com/aws/amazon-ssm-agent
+    - Docs: https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-manual-agent-install.html
+
+### IAM wise
+
+- For IAM user to use SSM, attach the `AmazonSSMFullAccess` AWS managed IAM policy.
+- For EC2 to be managed by SSM, attach the `AmazonEC2RoleforSSM` AWS managed IAM policy to its IAM role.
+
+### Check for SSM managed EC2 instances
+
+To see if an EC2 is managed by SSM, go to either of the following:
+
+- EC2 -> Systems Manager Shared Resources -> Managed Instances
+- AWS Systems Manager -> Shared Resources -> Managed Instances
+
+If you don't see anything:
+
+- Make sure you have attached the IAM policy to the IAM role.
+- Ensure that the ssm agent is installed on the instance and is running.
+- Check the logs of the ssm agent, by going to `/var/log/amazon/ssm`. Also run `systemctl status amazon-ssm-agent`. Restart the agent if necessary.
+- If above is done but you still don't see anything, stop the EC2 instance and start it again.
+
+
+## Services in SSM
+
+- Run command. Literally run commands on the hosts, without having to SSH into them.
+- State manager. Define and maintain desired state of system. Mainly configuration related.
+- Inventory. Collect and query software inventory.
+- Patch Manager. Select and deploy patches across large groups of instances.
+- Automation. Simplifies creating and updating AMIs.
+- Parameter store. Securely store configuration data, eg. passwords. Can be used by other services such as Lambda.
+- Maintenance windows. Built-in integration with Run command and Patch Manager.
+
+
+## Building Blocks
+
+- Document. A series of steps to be executed in sequence. Run command, State manager, Automation.
+
+
+## Other experimentation
+
+NOTE: Some of the information here may not be accurate.
+
+- Need to create resource groups to do anything meaningful.
+  - It is a must to use tags to find the required AWS resources (such as EC2 instances).
+  - One can also choose the type of resources to include, such as EC2 instance only, EC2 instance + Internet Gateway, or other combinations.
+
+## References
+
+- [AWS videos on SSM](https://www.youtube.com/watch?v=zwS8lssaY_k&list=PLhr1KZpdzukeH5jKyYi55ef9tEWAllypB&index=1)
