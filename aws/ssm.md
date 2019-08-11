@@ -36,6 +36,10 @@ If you don't see anything:
 
 ## Run Command
 
+Running commands on managed instances, without having to open up ports like SSH.
+
+No additional cost. All actions are logged and access can be controlled.
+
 ### Quick example
 
 NOTE: Please ensure that there is at least 1 EC2 instance managed by SSM. Otherwise you will not be able to do anything here.
@@ -52,6 +56,13 @@ Go to AWS Systems Manager -> Actions -> Run Command.
 There are other configuration options. Feel free to try them out.
 
 Once you run the command and it is done, select the instance under `Targets and outputs`, then click the `View output` button.
+
+### Concepts
+
+1. Managed Instance. Either on AWS or on-premise. As long as it has the ssm agent installed and the requisite IAM role (for AWS hosted) or access key (for on-prem).
+2. Document. A series of steps executed in sequence. Can pass arguments at runtime to it. Can be predefined or customized. Can be shared across accounts and versioned. IAM can be used to lock down documents and instances to perform them on.
+3. Command. Action to perform on a set of instances. Consists of a document, a set of targets and any runtime arguments.
+4. Command Invocation. Instantiation of a command on a particular instance. Can view status and output on a particular instance.
 
 
 ## Services in SSM
