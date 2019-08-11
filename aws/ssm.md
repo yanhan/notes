@@ -73,6 +73,16 @@ Any IAM user is effectively running the commands as root. To harden security sli
 - Restrict the documents the IAM user is allowed, by limiting the `Resource` to a select set of Documents, for the action `ssm:SendCommand`.
 - Restrict the instances the IAM user is allowed to send commands to, again for the action `ssm:SendCommand` but the `Resource` this time is EC2 instances. Perhaps those with a certain tag. See https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-rc-setting-up-cmdsec.html for more information.
 
+### Running commands at "scale"
+
+NOTE: Please try this to find out.
+
+Scale is very subjective. Hence the quotes.
+
+On awscli, there are the `--max-concurrency` and `--max-errors` flags. The first can be used to control the number of instances to run the command concurrently, while the second will stop further command invocations if the specified number of instances have errored out.
+
+It is possible to specify these in percentages.
+
 
 ## Services in SSM
 
