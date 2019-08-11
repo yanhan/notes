@@ -64,6 +64,15 @@ Once you run the command and it is done, select the instance under `Targets and 
 3. Command. Action to perform on a set of instances. Consists of a document, a set of targets and any runtime arguments.
 4. Command Invocation. Instantiation of a command on a particular instance. Can view status and output on a particular instance.
 
+### Security Notes
+
+Based on https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent-restrict-root-level-commands.html
+
+Any IAM user is effectively running the commands as root. To harden security slightly, you should:
+
+- Restrict the documents the IAM user is allowed, by limiting the `Resource` to a select set of Documents, for the action `ssm:SendCommand`.
+- Restrict the instances the IAM user is allowed to send commands to, again for the action `ssm:SendCommand` but the `Resource` this time is EC2 instances. Perhaps those with a certain tag. See https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-rc-setting-up-cmdsec.html for more information.
+
 
 ## Services in SSM
 
@@ -92,3 +101,5 @@ NOTE: Some of the information here may not be accurate.
 ## References
 
 - [AWS videos on SSM](https://www.youtube.com/watch?v=zwS8lssaY_k&list=PLhr1KZpdzukeH5jKyYi55ef9tEWAllypB&index=1)
+- [Restrict access to Documents and Instances](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent-restrict-root-level-commands.html)
+- [Restricting Run Command accessed based on Instance Tags](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-rc-setting-up-cmdsec.html)
