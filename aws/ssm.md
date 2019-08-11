@@ -34,7 +34,9 @@ If you don't see anything:
 - If above is done but you still don't see anything, stop the EC2 instance and start it again.
 
 
-## Run Command example
+## Run Command
+
+### Quick example
 
 NOTE: Please ensure that there is at least 1 EC2 instance managed by SSM. Otherwise you will not be able to do anything here.
 
