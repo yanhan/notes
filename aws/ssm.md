@@ -7,9 +7,9 @@ Purpose: Enables automated configuration and ongoing management of systems at sc
 ## Preliminaries
 
 - Agent based.
-- Comes pre-installed with Amazon Linux. Just do a `ps aux` and grep for `amazon-ssm-agent`.
+- Comes pre-installed with Amazon Linux and some Ubuntu Server AMIs. Just do a `ps aux` and grep for `amazon-ssm-agent`.
   - Also supports other Linux and Windows.
-  - Works for on-prem too.
+  - Works for on-prem too. But the installation will be slightly different.
   - For instances that don't have the agent, we will need to install it.
     - GitHub: https://github.com/aws/amazon-ssm-agent
     - Docs: https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-manual-agent-install.html
@@ -32,6 +32,24 @@ If you don't see anything:
 - Ensure that the ssm agent is installed on the instance and is running.
 - Check the logs of the ssm agent, by going to `/var/log/amazon/ssm`. Also run `systemctl status amazon-ssm-agent`. Restart the agent if necessary.
 - If above is done but you still don't see anything, stop the EC2 instance and start it again.
+
+
+## Run Command example
+
+NOTE: Please ensure that there is at least 1 EC2 instance managed by SSM. Otherwise you will not be able to do anything here.
+
+This is an example to show you how to run a Shell command using SSM.
+
+Go to AWS Systems Manager -> Actions -> Run Command.
+
+1. Select the `AWS-RunShellScript` Command document.
+2. For Commands, type `ls -al`.
+3. For Targets, choose one of the EC2 instances.
+4. Output is truncated to the final 2500 characters. If you want to see the full output of the command, you will need to modify `Output options` to use an S3 bucket or CloudWatch logs.
+
+There are other configuration options. Feel free to try them out.
+
+Once you run the command and it is done, select the instance under `Targets and outputs`, then click the `View output` button.
 
 
 ## Services in SSM
