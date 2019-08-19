@@ -2,6 +2,8 @@
 
 kubectl basics.
 
+## Getting Help
+
 Description of objects, can range from brief to quite complex (can be alternative to API docs):
 ```
 kubectl explain po
@@ -11,6 +13,14 @@ kubeclt explain pod.spec.containers.livenessProbe.httpGet
 ```
 
 The syntax is `kubectl explain <type>[.<fieldname> ...]`.
+
+Get list of API resources:
+
+```
+kubectl api-resources
+```
+
+## Main content
 
 Show info on k8s master and DNS (basically the cluster info):
 ```
@@ -33,7 +43,7 @@ List deployments:
 kubectl get deployments
 ```
 
-Create a proxy that forwards communications into k8s cluster's private network:
+Create a proxy that forwards communications into the k8s API server:
 ```
 kubectl proxy
 ```
@@ -186,6 +196,11 @@ kubectl config view
 Setup listener on host machine that forwards to ports in the container:
 ```
 kubectl port-forward <POD_NAME> <HOST_PORT>:<CONTAINER_PORT>  [<HOST_PORT_K>:<CONTAINER_PORT_K> ...]
+```
+
+Run unmanaged pod:
+```
+kubectl run <POD_NAME> --image=<IMAGE_NAME> --generator=run-pod/v1 --command -- <COMMAND_AND_ARGS_TO_CONTAINER>
 ```
 
 ## References
