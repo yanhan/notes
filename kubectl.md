@@ -183,6 +183,21 @@ Rollback to previous working version:
 kubectl rollout undo deployments/kubernetes-bootcamp
 ```
 
+Rollback to specific version:
+```
+kubectl rollout undo deployment myapp --to-revision=1
+```
+
+Pause deployment:
+```
+kubectl rollout pause deployment myapp
+```
+
+Resume deployment:
+```
+kubectl rollout resume deployment myapp
+```
+
 View cluster events:
 ```
 kubectl get events
@@ -203,6 +218,44 @@ Run unmanaged pod:
 kubectl run <POD_NAME> --image=<IMAGE_NAME> --generator=run-pod/v1 --command -- <COMMAND_AND_ARGS_TO_CONTAINER>
 ```
 
+Get health of control plane components:
+```
+kubectl get componentstatuses
+```
+
+Get heapster metrics (resource consumption) from nodes:
+```
+kubectl top node
+```
+
+Get heapster metrics from pods:
+```
+kubectl top pod
+```
+
+Extracting information using jsonpath (also see https://kubernetes.io/docs/reference/kubectl/jsonpath/), eg. `hostIP` of a Pod:
+```
+kubectl get po mypod-name -o jsonpath='{.status.hostIP}'
+```
+
+### Fast ways to create yml manifests
+
+For pods:
+```
+kubectl run --generator=run-pod/v1 nginx --image=nginx --dry-run -o yaml
+```
+
+Deploymnet:
+```
+kubectl create deployment --image=nginx nginx --dry-run -o yaml
+```
+
+Service:
+```
+kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run -o yaml
+```
+
 ## References
 
 - https://kubernetes.io/docs/tutorials/kubernetes-basics
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet
