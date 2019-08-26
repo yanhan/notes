@@ -1,0 +1,170 @@
+- Marriot Villas: Airbnb like experience but Marriot quality and earn rewards. Disrupting the disruptors.
+- RedHat's claim: OpenShift is the most popular Kubernetes distribution in the cloud.
+- Balance innovation and optimization.
+- 4 types of Cloud:
+  - Public Cloud (AWS, GCP, Azure)
+  - Private Cloud (OpenStack)
+  - Multi Cloud (multiple applications in different clouds)
+  - Hybrid Cloud
+- Interconnectivity is the key to Hybrid Cloud.
+- Multi Cloud has no interconnectivity between clouds.
+- RedHat claims they can abstract away underlying cloud infrastructure for you to use Hybrid Cloud where there are multiple underlying public clouds / private clouds.
+- Hybrid Cloud: combination of public and private clouds, with some degree of workload portability, integration, orchestration, unified management across clouds.
+- RedHat: 1 set of monitoring, tools, OS: OpenShift runs across all cloud providers.
+- Hybrid Cloud should allow you to achieve consistency across various areas.
+- Build open Hybrid Cloud with the future in mind. U-turn will not be easy if you make the wrong decisions.
+- Very important:
+  - Use open source solutions. Why? Most innovation today happens in open source.
+  - Interoperatbility and open standards. So you can use it with other technologies.
+  - Wide industry support, vibrant ecosystem. Both hardware and software vendors.
+  - Support portable workloads, so you can move them to other environments.
+- Hybrid Cloud can bridge the old and the new.
+- Open Hybrid Cloud: RedHat designed following this.
+- Develop cloud native apps to take advantage of Hybrid Cloud.
+- Over 50% of workloads on Azure is based on Linux.
+- Open source is not just code, but also culture.
+- 3 pillars: Hybrid Cloud infrastructure, cloud native applications, automation & management. Core: RHEL.
+- OpenShift: runs on most cloud platforms. No lock in. Also has middleware.
+- RedHat CodeReady: developer tooling that comes with OpenShift.
+- REdHat claims they are 2nd largest contributor to Kubernetes, after Google.
+- Certified Cloud Providers Program: RedHat works with them. There are more than 650 providers. Alibaba, AWS, Google, IBM, Microsoft.
+- Summary of this talk: Any Application. All Footprints. No lock-in.
+
+## RHEL 8 - what's new?
+
+- Intelligent OS.
+  - RedHat Insights. SaaS with rules, delivered as a client. You decide if and how frequently to run. From their years of experience fixing issues with RHEL. Analyzes environment and looks at (A) security issues (B) performance (C) availability (D) stability.
+  - Helps prioritize issues after finding them.
+  - Insights has integration with Ansible. Can update Ansible playbook to run it and solve problem.
+- Virtual data optimizer: compress and deduplication of data on the fly.
+  - 4K blocks. Data generated goes to memory and goes through deduplication.
+  - Manage storage costs in Hybrid Cloud. VDO data reduction processing.
+  - DB, messaging, monitoring, alerting, triaging, systems and application logs: saves about 50% space.
+  - Backups, containers, virtual desktops and servers: up to 8x storage space saved.
+- Security: RedHat removes old deprecated crypto to remove human error.
+  - Network bound disk encryption (NBDE) and TPM.
+  - LUKS encrypted volume allows you to transparently encrypt data at rest across flexible sofwtare defined rules.
+  - Defines a trusted network with 2 entities: server with 1 public key, volumes that are part of trusted network (Hybrid Cloud).
+  - When disk shows up on trusted network, does handshake with servers, gets handed a password and goes on to complete boot process.
+  - TPM can be used to store public key.
+  - nftables: simpler way of creating simple rules to make it easier to manage.
+  - System wide crypto policies:
+    - 1 place to find all the crypto used across systems.
+    - I believe he mentioned can upgrade crypto without taking services down.
+- Image Builder: create golden images for any environment from same blueprint to increase stability.
+  - Any public cloud, private cloud, hypervisors, bare metal.
+- System rules: consistent configuration over multiple versions of RHEL, eg. device names.
+- Manage containers using Podman: need RBAC to run containers in production. Seems to sit 1 layer below runc.
+  - Create image with Buildash.
+  - Inspect and transport images with Skopeo.
+- RHEL CoreOS. Immutable host based on RHEL.
+  - Combines innovations of Container Linux and Atomic with stability and ecosystem of RHEL.
+  - Small footprint, ~400 RHEL packages. Fast running. OTA updates of OS using immutable images. Managed and automated using Kubernetes operators.
+  - Only available with OpenShift.
+- RedHat universal base image (Docker).
+
+
+## OpenShift 4
+
+- BMW connected drive: powered by OpenShift.
+- Tesla is a computer on 4 wheels: redefined auto industry. People look more at the software than mechanical aspects of a car.
+- UPS mychoice: using OpenShift. Analytics driven logistics: ML models on OpenShift.
+- Cathay Pacific: OpenShift for all B2C services. Can deploy marketing campaigns in 30 minutes. Best economy class provider in 2018.
+- Container adoption challenges
+  - Container security: Image scanning, patching, compliance.
+  - Day 2 management: installation, upgrades, maintenance, integrating existing enterprise technology.
+  - Application lifecycle management: integrating existing developer tools, monitoring and managing applications.
+- Customers want cloud like support in private cloud.
+- RedHat: enterprise software company. Goes through hundreds of OSS prospects, packages them together and makes everything reliable.
+- OpenShift has a 9 year lifecycle management. Over 200 valid integrations.
+- Day 2 management automation: use the Operator Framework.
+  - Operators codify operational knowledge and workflows to automate lifecycle management of containerized applications with Kubernetes.
+  - Essentially codifying a sysadmin.
+  - Operators enable a cloud-like experience everywhere you run Kubernetes.
+  - Crunchy data operator is an example of a database
+  - Enhanced observability, customizaton (change operator to our needs), local development, fully OSS, any Kubernetes, certified on OpenShift.
+  - operatorhub.io: launched by RedHat, AWS, Microsoft and Google.
+  - OpenShift operator certification.
+  - He suggests building applications using Operators. (Sounds like competition to Helm?)
+  - Ticketmaster uses Prometheus Operator to manage 344 Prometheus instances. Made their lives easier.
+- OpenShift service mesh: combines Istio, Kiali (UI) and Jaegar.
+- OpenShift serverless: Knative. Supports Azure functions, Apache Camel. HTTP, Kafka, AMQP.
+- OpenShift CodeReady workspaces. Eclipse and other editor plugins.
+- There's self managed OpenShift and hosted OpenShift (RedHat OpenShift Dedicated). On AWS, Azure, coming soon for GCP.
+- Bank of America: transited 75% of application workloads to OpenShift. Saed 2.1 billion dollars in infrastructure over 7 years. Improved 26 million daily customer interactions.
+
+
+## RHEL security
+
+- RedHat satellite: centrally manage all RHEL instances, whether on premise or on cloud.
+  - 3 functions: vulnerability assessment, compliance management, system comparison.
+- RedHat Insight: assess RedHat environment, present findings with prescriptive remediation steps or Ansible playbook. Rules are contributed from RedHat subject matter experts.
+  - Identifies risks for availability, performance, stability and security.
+  - AI Ops. Proactive identification.
+  - Insight availability: OpenShift ops fail if insufficient CPU / memory -> increase CPU / memory reservation
+  - Insight performance: network interface not performing at max speed -> recommend to check cables, connections and remote switch settings.
+  - Insight stability: Filesystem exceeds 95% capacity -> increase free space on host.
+  - Insight security: high impact CVEs -> recommend to update kernel.
+  - There are more than 600 roles in Insight, more will be added.
+- Compliance: built on OpenSCAP reporting.
+
+
+## Accelerating tech and business value with DevOps (by Paul Whiten)
+
+- Agility is competitive advantage; software is not (eg. Uber). Change direction, outmaneuvre competitors.
+- High performance organizations (from embracing DevOps):
+  - Release code 46x more often (deployments).
+  - Lead time is 2555x faster (time to get from idea to production).
+  - 7x lower change failure rate on production.
+  - 2604x faster time to recover from incidents.
+- Deployment frequency:
+  - Low performing organizations: between once / week to once / month.
+  - Medium performing organizations: between once / week to once / month.
+  - High performing organizations: between once / hour to once / day.
+  - Elite performing organizations: on demand (multiple times / day).
+- Self service infrastructure. Everything as code (infra, config as code). Automation (fast, repeatable, less error prone)
+- Lead time for changes (time to go from committed code to production):
+  - Low performing organizations: between 1 to 6 months.
+  - Medium performing organizations: between 1 week to 1 month.
+  - High performing organizations: between 1 day to 1 week.
+  - Elite performing organizations: less than 1 hour.
+- DevOps pipeline. CI / CD in other words. Repeatable and automated.
+- OpenShift: a smarter DevOps platform.
+- OpenShift App Runtimes: curated set of technologies and frameworks: lets you focus on building applications.
+- CodeReady workspaces: container native development workspace with server and web IDE that accelerates projects and enables team collaboration. Available on premise / cloud.
+  - Replace desktops for developers and enables true container based DevOps.
+  - Full IDE experience from browser.
+- Change fail rate (percentage of changes that result in degraded service):
+  - Low performing organizations: 46% to 60% of the time.
+  - Medium performing organizations: 0 to 15% of the time.
+  - High performing organizations: 0 to 15% of the time.
+  - Elite performing organizations: 0 to 15% of the time.
+- Time to restore (How long it takes to restore service when a service incident occurs):
+  - Low performing organizations: between 1 week to 1 month.
+  - Medium performing organizations: < 1 day.
+  - High performing organizations: < 1 day
+  - Elite performing organizations: < 1 hour.
+  - IOW, confidence to fix things when broken.
+- How does OpenShift improve stability?
+  - Advanced deployment strategies (A/B testing, blue-green, canary)
+  - Monitoring and alerting.
+  - Autoscaling and self healing capabilities.
+  - Operator Framework: automate infrastructure and application management. Focus on delivering applications and services.
+  - Big focus on RHEL 8 around containers: Podman, Buildah, Skopeo to run build, find containers.
+  - Universal Base Image (run the same across infrastructure).
+- Culture underpins DevOps.
+  - Leadership helps teams gain autonomy at work.
+  - Psychological safety to take risks. Not balmed on failure. Key to success. Blameless culture.
+    - Eg. blaming new guy for not changing password vs. password wasn't changed, why didn't we build a system to change it?
+- RedHat Open Innovation Labs - coresidency.
+- Measuring ROI of DevOps.
+  - Deployments per year * change failure rate * MTTR * outage cost per hour = reduced product downtime.
+    - Eg. 26 deployments * 7% * 8 hours * 20K = 291K per year. And this is for a single application.
+    - Containerization decreases MTTR to 4 hours, which justifies tools such as OpenShift.
+  - Savings from automating manual tasks:
+    - Staff * average annual salary * potential amount of time saved.
+    - Eg. 10 * 100K * 15% = 150K per year
+  - Reinvest time savings on innovation.
+    - Time recovered from automation (or rework avoided) * Experiment releases per year * Idea success rate * Idea impact * Annual revenue = Potential increase in revenue
+    - Eg. 15 * 52 * 30% * 1% * 20M = 468K per year. This is per product.
+- Learn more about DevOps the RedHat way -> schedule a Discovery session.
