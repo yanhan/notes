@@ -115,7 +115,41 @@ Revoke token by accessor
 vault token revoke -accessor TOKEN_ACCESSOR
 ```
 
+
+## Dynamic Database secrets
+
+I believe this is good for humans to get short lived credentials to access DB.
+
+Enable the database secrets engine:
+```
+vault secrets enable database
+```
+
+Configure the engine:
+```
+vault write database/config/postgresql plugin_name=postgresql-database-plugin allowed_roles=myrole connection_url="postgresql://root:REPLACE_WITH_ROOT_PASSWORD@127.0.0.1:5432/postgres?sslmode=disable"
+```
+
+Create the following file `myrole.sql`:
+```
+CREATE ROLE "{{name}}" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO "{{name}}";
+```
+
+Then create the role:
+```
+vault write database/roles/myrole db_name=postgresql creation_statements=@myrole.sql default_ttl=1h max_ttl=24h
+```
+
+Get credentials:
+```
+vault read database/creds/myrole
+```
+
+Each time you run the `vault read database/creds/myrole` command, you will get new credentials.
+
 ## References
 
 - https://learn.hashicorp.com/vault/developer/sm-versioned-kv
+- https://learn.hashicorp.com/vault/developer/sm-dynamic-secrets
 - https://www.idkrtm.com/hashicorp-vault-managing-tokens/
