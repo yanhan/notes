@@ -103,6 +103,19 @@ vault kv delete metadata secret/some/company
 ```
 
 
+## Tokens
+
+List token accessors:
+```
+vault list auth/token/accessors
+```
+
+Revoke token by accessor
+```
+vault token revoke -accessor TOKEN_ACCESSOR
+```
+
 ## References
 
 - https://learn.hashicorp.com/vault/developer/sm-versioned-kv
+- https://www.idkrtm.com/hashicorp-vault-managing-tokens/
