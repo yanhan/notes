@@ -67,7 +67,7 @@ If a scheduler runs on multiple master nodes, pass in the `--leader-elect=true` 
 
 Ensure that the user / Service Account that the scheduler Pod uses has permissions to update and patch the `endpoints` object named in the `--lock-object-name=some_unique_name` command line flag passed to the scheduler binary. To do that, you might have to create a ClusterRoleBinding and ClusterRole. Take reference from the `system:kube-scheduler` ClusterRole.
 
-Failure to do the above will cause the scheduler to fail to acquire a lease.
+Failure to do the above will cause the scheduler to fail to acquire a lease and hence fail to work.
 
 
 ## Fast way to get CPU and memory consumption of Pods and Nodes
