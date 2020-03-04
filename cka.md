@@ -75,3 +75,8 @@ Failure to do the above will cause the scheduler to fail to acquire a lease and 
 This is a great use of metrics-server on the command line.
 
 Using `kubectl top po` and `kubectl get node`, we get the CPU and memory consumption of Pods and Nodes respectively.
+
+
+## Draining nodes that contain Pods not managed by higher level resources
+
+If a node contains Pods not managed by a ReplicaSet, ReplicationController, DaemonSet, StatefulSet or Job, you will have to supply the `--force` flag to `kubectl drain`. Such Pods will be permanently deleted from the k8s cluster.
