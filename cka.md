@@ -84,4 +84,84 @@ If a node contains Pods not managed by a ReplicaSet, ReplicationController, Daem
 
 ## Upgrading the k8s version
 
-https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+Detailed instructions: https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+
+First, find out which k8s version your cluster can be upgraded to:
+```
+kubeadm upgrade plan
+```
+
+You have to upgrade one minor version at a time. The upgrade process is done one node at a time:
+
+- drain the master node
+- upgrade the control plane on master node
+- upgrade kubelet on master node (and restart it?)
+- uncordon the master node
+- drain the worker node
+- use kubeadm to upgrade the worker node
+- upgrade kubelet on worker node and restart it
+- uncordon the worker node
+
+Suppose the next version you can upgrade to is `v1.17.0`
+
+Drain the master node:
+```
+kubectl drain master --ignore-daemonsets
+```
+
+Then we run the following **on the master node**:
+```
+kubeadm upgrade apply v1.17.0
+apt install kubelet=1.17.0-00
+```
+
+Then uncordon the master:
+```
+kubectl uncordon master
+```
+
+Drain the worker node:
+```
+kubectl drain worker --ignore-daemonsets
+```
+
+Then we run the following **on the worker node**:
+```
+kubeadm upgrade node
+apt install kubelet=1.17.0-00
+systemctl restart kubelet
+```
+
+Uncordon the worker:
+```
+kubectl uncordon worker
+```
+
+
+## Snapshot etcd for backup
+
+First, you will need to get the information from the `etcd-master` pod by looking at its `command` section:
+
+- `--trusted-ca-file`
+- `--cert-file`
+- `--key-file`
+- `--listen-client-urls`
+
+These map to the following flags for the upcoming `etcdctl` commands:
+
+- `--cacert`
+- `--cert`
+- `--key`
+- `--endpoints`
+
+To take a snapshot:
+```
+ETCDCTL_API=3 etcdctl --endpoints 127.0.0.1:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key snapshot save /tmp/snapshot-pre-boot.db
+```
+
+Restoring from the snapshot to a new dir `/var/lib/etcd-new`:
+```
+ETCDCTL_API=3 etcdctl snapshot --endpoints 127.0.0.1:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key --data-dir /var/lib/etcd-new restore /tmp/snapshot-pre-boot.db
+```
+
+Modify the static pod manifest `/etc/kubernetes/manifests/etcd.yaml` so that the host volume for etcd points to `/var/lib/etc-new`. The `etcd-master` static pod will be re-created.
