@@ -241,3 +241,11 @@ Approve the CSR object:
 ```
 kubectl certificate approve REPLACE_WITH_CSR_OBJECT_NAME
 ```
+
+
+## RBAC - determine if a user has privileges to perform some action
+
+For instance, to determine if a user can list pods in the default namespace (or do anything else by replacing the action appropriately):
+```
+kubectl get po --as USERNAME
+```
