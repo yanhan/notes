@@ -165,3 +165,61 @@ ETCDCTL_API=3 etcdctl snapshot --endpoints 127.0.0.1:2379 --cacert /etc/kubernet
 ```
 
 Modify the static pod manifest `/etc/kubernetes/manifests/etcd.yaml` so that the host volume for etcd points to `/var/lib/etc-new`. The `etcd-master` static pod will be re-created.
+
+
+## Certificates
+
+There are a bunch of certs in the following directories:
+
+- /etc/kubernetes/pki
+- /etc/kubernetes/pki/etcd
+
+View details of a cert (such as Common Name, Issuer name, expiry, Subject Alternative Names):
+```
+openssl x509 -in REPLACE_WITH_CERT_FILE_NAME -text -noout
+```
+
+
+## Non responsive kubectl due to certs
+
+Tips:
+
+- Drop down to docker. Use `docker ps -a` to get the relevant containers which may have exited.
+- Use `docker logs -f` to get logs of containers; works for containers which have exited.
+- Familiarize yourself with all the certificates necessary.
+
+Check etcd certs and ensure they exist and are correct. Look up the pod manifest file at `/etc/kubernetes/manifests/etcd.yaml` or similar.
+
+If you see this error: `Unable to connect to the server: net/http: TLS handshake timeout`:
+
+- use `docker ps -a` to find the container id of the apiserver container. It might have exited.
+- use `docker logs -f CONTAINER_ID` to view the logs for the apiserver container.
+- Look at what it is trying to connect to. If 2379, it is etcd. Is the correct CA cert for etcd being passed in? This is where we have to use the `openssl x509 -in CERT_NAME -text -noout` to find the Issuer name and compare to see if it is equal to the Common Name of the CA cert.
+- Modify `/etc/kubernetes/manifests/apiserver.yaml` to use the correct CA cert for etcd.
+
+
+### Expired cert rotation
+
+Reference: https://kubernetes.io/docs/concepts/cluster-administration/certificates/
+
+If certificate has expired, you will see a `tls: bad certificate` error in the apiserver logs.
+
+Look at the previous cert details using `openssl x509 -in /etc/kubernetes/pki/apiserver-etcd-client.crt`.
+
+Generate a CSR using:
+```
+openssl req -new -key /etc/kubernetes/pki/apiserver-etcd-client.key -out ./apiserver-etcd-client-new.csr
+```.
+
+Use the following info (Country and State does not matter):
+```
+Organization Name: `system:masters`
+Common Name: `kube-apiserver-etcd-client`
+```
+
+Generate the certificate using the CA cert and key and CSR:
+```
+openssl x509 -req -in ./apiserver-etcd-client-new.csr -CA /etc/kubernetes/pki/etcd/ca.crt -CAkey /etc/kubernetes/pki/etcd/ca.key -CAcreateserial -out ./apiserver-etcd-client-new.crt -days 10000 -extensions v3_ext
+```
+
+Copy the new cert file to `/etc/kubernetes/pki`, then modify `/etc/kubernetes/manifests/kube-apiserver.yaml` to use that cert file.
