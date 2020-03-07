@@ -209,7 +209,7 @@ Look at the previous cert details using `openssl x509 -in /etc/kubernetes/pki/ap
 Generate a CSR using:
 ```
 openssl req -new -key /etc/kubernetes/pki/apiserver-etcd-client.key -out ./apiserver-etcd-client-new.csr
-```.
+```
 
 Use the following info (Country and State does not matter):
 ```
