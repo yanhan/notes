@@ -223,3 +223,21 @@ openssl x509 -req -in ./apiserver-etcd-client-new.csr -CA /etc/kubernetes/pki/et
 ```
 
 Copy the new cert file to `/etc/kubernetes/pki`, then modify `/etc/kubernetes/manifests/kube-apiserver.yaml` to use that cert file.
+
+
+## Certificates API
+
+CSR object:
+```
+apiVersion: certificates.k8s.io/v1beta1
+kind: CertificateSigningRequest
+metadata:
+  name: REPLACE_WITH_CSR_OBJECT_NAME
+spec:
+  request: BASE 64 encoded OpenSSL CSR
+```
+
+Approve the CSR object:
+```
+kubectl certificate approve REPLACE_WITH_CSR_OBJECT_NAME
+```
