@@ -249,3 +249,103 @@ For instance, to determine if a user can list pods in the default namespace (or 
 ```
 kubectl get po --as USERNAME
 ```
+
+
+## Network
+
+Show route table to see default route:
+```
+ip route show default
+```
+
+See actual port on a node that is listening for a traffic going to a Pod:
+```
+netstat -nltp
+```
+
+See active connections to a port. Course says:
+```
+netstat -anp
+```
+
+But what we learnt to see established connections:
+```
+netstat -ntp | grep PORTNUMBER
+```
+
+See network plugin used by kubelet (look for the value of the `--network-plugin` flag):
+```
+ps aux | grep kubelet
+```
+
+To see which CNI plugin is used, see the contents of the file in the directory:
+```
+ls /etc/cni/net.d/
+```
+
+To see the name of the binary that will be run by kubelet after pod and namespace are created, see the `type` field of the file in
+```
+ls /etc/cni/net.d/
+```
+
+To see default route of Pods on a node, schedule a `busybox` container on that node whose command is `/bin/sleep 3600`. Then `k exec` into that Pod and run:
+```
+ip route show default
+```
+
+Installing weave:
+```
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
+
+Check if weave is working from host machine:
+```
+curl -L https://git.io/weave -o /usr/local/bin/weave
+chmod a+x /usr/local/bin/weave
+weave status
+```
+
+You should see this at the end:
+```
+        Service: ipam
+        Status: ready
+        Range: 10.32.0.0/12
+DefaultSubnet: 10.32.0.0/12
+``
+
+
+Check if weave is working from container. Choose one container, then run:
+```
+kubectl -n kube-system exec CONTAINER_NAME -c weave -- /home/weave/weave --local status
+```
+
+See IP addresses for Pods when weave is configured (get logs of weave-net and search for `ipalloc-range`):
+```
+kubectl -n kube-system logs ds/weave-net weave | grep alloc
+```
+
+To see the IP address range for `Service` objects in the cluster, look for the value of `--service-cluster-ip-range` in the following output:
+```
+ps aux | grep kube-apiserver
+```
+
+To see the type of proxy used by `kube-proxy`, search for `Using ??? Proxier` (where `???` is your answer) in its logs:
+```
+kubectl -n kube-system logs KUBE_PROXY_CONTAINER_NAME
+```
+
+To see the default backend of an ingress (look for `Default backend`):
+```
+kubectl describe ingress INGRESS_NAME
+```
+
+For ingress, this annotation is crucial. If not present, the ingress will not work (there are other capturing rules possible but this is the basic):
+```
+nginx.ingress.kubernetes.io/rewrite-target: /
+```
+
+There's also this annotation on ingress:
+```
+nginx.ingress.kubernetes.io/ssl-redirect: "false"
+```
