@@ -364,3 +364,35 @@ If Pods fail to startup, check the following components of the `kube-system` nam
 - If the node does not appear, SSH into the node. Check if `kubelet` is started: `sudo systemctl status kubelet`
 - Check kubelet logs using `journalctl -u kubelet -f`. Look at `/etc/systemd/system/kubelet.service.d` as well. Look at the files referenced there. Check for incorrect certificate.
 - Another possible reason is incorrect kube apiserver IP / port referenced in `/etc/kubernetes/kubelet.conf`.
+
+
+## Advanced kubectl commands
+
+View kubectl config from a custom kubeconfig file:
+```
+kubectl config view --kubeconfig=/path/to/kubeconfig -o json
+```
+
+Using kubectl get with `sort-by`:
+```
+kubectl get pv --sort-by='{.spec.capacity.storage}'
+```
+
+Using kubectl get with `sort-by` and `-o custom-columns` (see https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns):
+```
+kubectl get pv --sort-by='{.spec.capacity.storage} --o custom-columns='NAME:.metadata.name,CAPACITY:.spec.capacity.storage'
+```
+
+Filtering using JSONPATH (see https://kubernetes.io/docs/reference/kubectl/jsonpath/):
+```
+kubectl config view --kube-config=/some/path -o jsonpath='{.contexts[?@.context.user=="some-user-name"].name}'
+```
+
+
+## Do rolling update and record in annotation
+
+```
+kubectl set image --record deploy deploymentname CONTAINERNAME=image:imageVersion
+```
+
+You should see a `kubernetes.io/change-cause` annotation in the Deployment object.
