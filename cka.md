@@ -225,9 +225,9 @@ openssl x509 -req -in ./apiserver-etcd-client-new.csr -CA /etc/kubernetes/pki/et
 Copy the new cert file to `/etc/kubernetes/pki`, then modify `/etc/kubernetes/manifests/kube-apiserver.yaml` to use that cert file.
 
 
-## Certificates API
+## Certificates API (aka creating user)
 
-CSR object:
+First off, you need to create a CSR object:
 ```
 apiVersion: certificates.k8s.io/v1beta1
 kind: CertificateSigningRequest
@@ -241,6 +241,13 @@ Approve the CSR object:
 ```
 kubectl certificate approve REPLACE_WITH_CSR_OBJECT_NAME
 ```
+
+Then extract the certificate from the `status.certificate` field of the CSR object:
+```
+kubectl get csr CSRNAME -o jsonpath='{.status.certificate}'
+```
+
+Then create a kubeconfig with the user certificate and user key.
 
 
 ## RBAC - determine if a user has privileges to perform some action
@@ -396,3 +403,24 @@ kubectl set image --record deploy deploymentname CONTAINERNAME=image:imageVersio
 ```
 
 You should see a `kubernetes.io/change-cause` annotation in the Deployment object.
+
+
+## DNS resolution within Pod network
+
+Reference: https://v1-13.docs.kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+
+Create a busybox Pod and we will use dnslookup to do the resolution. Suppose this Pod is named `dnsresolver`.
+
+For services, the name is `SERVICENAME.NAMESPACE.svc.cluster.local`
+
+For Pods, the name is `POD-IP-WITH-DASHES-NOT-DOTS.NAMESPACE.pod.cluster.local`
+
+Eg for a service named `svcaaa` in the `default` namespace:
+```
+kubectl exec -it dnsresolver -- nslookup svcaaa.default.svc.cluster.local
+```
+
+For a Pod named `mypod1` with Pod IP `10.3.17.229` in the `default` namespace:
+```
+kubectl exec -it dnsresolver -- nslookup 10-3-17-229.default.pod.cluster.local
+```
