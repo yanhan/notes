@@ -365,6 +365,8 @@ If Pods fail to startup, check the following components of the `kube-system` nam
 - controller-manager (if scale deployment but pod still never start)
 - Check volume mounts of controller-manager to ensure the path to k8s certs on the host is correct.
 
+**NOTE:** Please take note that all the names and labels and values need the correct spelling. Otherwise the Pod will not start.
+
 
 ## Troubleshooting node failure
 
@@ -424,3 +426,8 @@ For a Pod named `mypod1` with Pod IP `10.3.17.229` in the `default` namespace:
 ```
 kubectl exec -it dnsresolver -- nslookup 10-3-17-229.default.pod.cluster.local
 ```
+
+
+## NetworkPolicy
+
+To allow all ingress traffic, you just need to specify the `ports` section under `ingress`. Do not specify anything in `namespaceSelector` or `podSelector`.
