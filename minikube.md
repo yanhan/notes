@@ -60,6 +60,16 @@ minikube start --extra-config=apiserver.enable-swagger-ui=true
 
 Then run `kubectl proxy`, go to http://127.0.0.1:8001/openapi/v2 to get the JSON. You will need a swagger viewer to turn the JSON into a swagger page.
 
+
+## Enable NetworkPolicy
+
+Install a CNI plugin such as Weave.
+
+Then stop minikube. Then start minikube by running:
+```
+minikube start --network-plugin=cni
+```
+
 ## References
 
 - https://kubernetes.io/docs/tutorials/hello-minikube/
