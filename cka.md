@@ -50,11 +50,11 @@ The name of Static Pods end with the name of the node they are on.
 
 It is not possible to delete Static Pods using the kubectl command. You will have to use `docker stop` on the relevant container on the node itself to delete the Pod.
 
-Typically, kubelet looks at files in the `/etc/kubernetes/manifests` directory and creates Pods out of those files.
-
-Alternatively, it is possible to pass to kubelet the `--pod-manifest-path` command line flag to specify the directory where the manifests are.
+To find the path where static pod manifests are located, look at the value of the `--pod-manifest-path` command line option passed to kubelet. This is typically `/etc/kubernetes/manifests`.
 
 Alternatively, pass to kubelet the `--config=SOMEFILE.yml` command line flag, where `SOMEFILE.yml` is a file that contains an entry with `staticPodPath: /dir/containing/manifests`.
+
+Typically used to setup control plane pods.
 
 
 ## Multiple Schedulers
@@ -227,6 +227,12 @@ Copy the new cert file to `/etc/kubernetes/pki`, then modify `/etc/kubernetes/ma
 
 ## Certificates API (aka creating user)
 
+Create an OpenSSL private key for the user and generate a CSR:
+```
+openssl genrsa -out peter.key 2048
+openssl req -new -key peter.key -subj "/CN=peter" -out peter.csr
+```
+
 First off, you need to create a CSR object:
 ```
 apiVersion: certificates.k8s.io/v1beta1
@@ -234,6 +240,25 @@ kind: CertificateSigningRequest
 metadata:
   name: REPLACE_WITH_CSR_OBJECT_NAME
 spec:
+  request: BASE 64 encoded OpenSSL CSR
+```
+
+or with more information:
+```
+apiVersion: certificates.k8s.io/v1beta1
+kind: CertificateSigningRequest
+metadata:
+  name: peter
+spec:
+  groups:
+    - system:authenticated
+    # Just an example, please adjust accordingly
+    - system:masters
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+  username: peter
   request: BASE 64 encoded OpenSSL CSR
 ```
 
