@@ -243,7 +243,7 @@ spec:
   request: BASE 64 encoded OpenSSL CSR
 ```
 
-or with more information:
+or with more information (The `usages` and `username` parts do not seem relevant):
 ```
 apiVersion: certificates.k8s.io/v1beta1
 kind: CertificateSigningRequest
