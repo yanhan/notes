@@ -1,0 +1,14 @@
+- Item 17: Be defensive when iterating over arguments (Iterator Protocol)
+- Item 21: Enforce clarity with keyword only arguments
+- Item 23 page 63: Method reference: accept functions for simple interfaces instead of classes
+- NotImplementedError: a useful exception to specify method that subclasses need to implement. Similar to `undefined` in Haskell
+- Item 26: Use multiple inheritance only for Mix-in Utility classes. Interesting use of mixins.
+- Item 28: Inherit from Collections.abc for custom container types
+- Item 31: use descriptors for reusable `@property` methods
+- Item 32: use `__getattr__`, `__getattribute__` and `__setattr__` for lazy attributes.
+- Item 40: Consider coroutines to run many functions concurrently. `yield from` keyword.
+  - `concurrent.futures.ThreadPoolExecutor`
+  - `concurrent.futures.ProcessPoolExecutor`
+- Item 42: define function decorators with `functools.wraps`
+- Item 43: consider `contextlib` and with statements for reusable try/finally behavior
+- Item 46: use built-in algorithms and data structures. See page 170 for itertools functions that are very useful.
