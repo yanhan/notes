@@ -99,7 +99,7 @@ You have to upgrade one minor version at a time. The upgrade process is done one
 
 - drain the master node
 - upgrade the control plane on master node
-- upgrade kubelet on master node (and restart it?)
+- upgrade kubelet and kubectl on master node and restart kubelet
 - uncordon the master node
 - drain the worker node
 - use kubeadm to upgrade the worker node
@@ -117,6 +117,7 @@ Then we run the following **on the master node**:
 ```
 kubeadm upgrade apply v1.17.0
 apt install kubelet=1.17.0-00
+systemctl restart kubelet
 ```
 
 Then uncordon the master:
