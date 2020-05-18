@@ -402,7 +402,7 @@ If Pods fail to startup, check the following components of the `kube-system` nam
 
 - If the node does not appear, SSH into the node. Check if `kubelet` is started: `sudo systemctl status kubelet`
 - Check kubelet logs using `journalctl -u kubelet -f`. Look at `/etc/systemd/system/kubelet.service.d` as well. Look at the files referenced there. Check for incorrect certificate.
-- Another possible reason is incorrect kube apiserver IP / port referenced in `/etc/kubernetes/kubelet.conf`.
+- Another possible reason is incorrect kube apiserver IP / port referenced in `/etc/kubernetes/kubelet.conf`. The port should be 6443.
 
 
 ## Advanced kubectl commands
