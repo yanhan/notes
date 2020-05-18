@@ -59,6 +59,8 @@ Typically used to setup control plane pods.
 
 ## Multiple Schedulers
 
+Reference: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+
 To use a custom scheduler to schedule a Pod, specify the `schedulerName` in the Pod spec.
 
 To start a scheduler, ensure its `--scheduler-name` is unique.
@@ -66,6 +68,8 @@ To start a scheduler, ensure its `--scheduler-name` is unique.
 If a scheduler runs on multiple master nodes, pass in the `--leader-elect=true` flag to the scheduler binary. Also pass in the `--lock-object-name=some_unique_name` flag.
 
 Ensure that the user / Service Account that the scheduler Pod uses has permissions to update and patch the `endpoints` object named in the `--lock-object-name=some_unique_name` command line flag passed to the scheduler binary. To do that, you might have to create a ClusterRoleBinding and ClusterRole. Take reference from the `system:kube-scheduler` ClusterRole.
+
+Based on https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/ , the ClusterRole must have permission to `get` and `update` the `leases` object with the same name as the `--scheduler-name`.
 
 Failure to do the above will cause the scheduler to fail to acquire a lease and hence fail to work.
 
