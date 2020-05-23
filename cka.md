@@ -169,7 +169,12 @@ Restoring from the snapshot to a new dir `/var/lib/etcd-new`:
 ETCDCTL_API=3 etcdctl snapshot --endpoints 127.0.0.1:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key --data-dir /var/lib/etcd-new restore /tmp/snapshot-pre-boot.db
 ```
 
-Modify the static pod manifest `/etc/kubernetes/manifests/etcd.yaml` so that the host volume for etcd points to `/var/lib/etc-new`. The `etcd-master` static pod will be re-created.
+Modify the static pod manifest `/etc/kubernetes/manifests/etcd.yaml` so that:
+
+- the host volume for etcd points to `/var/lib/etc-new`.
+- You supply `--initial-cluster-token=etcd-cluster-1` or some other value which is different from the original cluster token.
+
+The `etcd-master` static pod will be re-created.
 
 
 ## Certificates
