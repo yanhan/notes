@@ -197,6 +197,8 @@ Tips:
 - Drop down to docker. Use `docker ps -a` to get the relevant containers which may have exited.
 - Use `docker logs -f` to get logs of containers; works for containers which have exited.
 - Familiarize yourself with all the certificates necessary.
+- Look through all the certificates to check if any expired. Use `date` to get the current date and time on the host. Then run `openssl x509 -in CERTFILE -noout -text` for each cert to check if they expired.
+- Memorize `openssl x509` command to create cert from a CSR.
 
 Check etcd certs and ensure they exist and are correct. Look up the pod manifest file at `/etc/kubernetes/manifests/etcd.yaml` or similar.
 
