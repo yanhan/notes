@@ -299,6 +299,11 @@ For instance, to determine if a user can list pods in the default namespace (or 
 kubectl get po --as USERNAME
 ```
 
+Or:
+```
+kubectl auth can-i get pods --as USERNAME
+```
+
 
 ## Network
 
