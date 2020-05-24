@@ -255,6 +255,11 @@ spec:
   request: BASE 64 encoded OpenSSL CSR
 ```
 
+You can use this command to get the base64 of the CSR on one line:
+```
+base64 CSR_FILE | tr -d '\n'
+```
+
 or with more information (The `usages` and `username` parts do not seem relevant):
 ```
 apiVersion: certificates.k8s.io/v1beta1
