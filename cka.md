@@ -78,7 +78,7 @@ Failure to do the above will cause the scheduler to fail to acquire a lease and 
 
 This is a great use of metrics-server on the command line.
 
-Using `kubectl top po` and `kubectl get node`, we get the CPU and memory consumption of Pods and Nodes respectively.
+Using `kubectl top po` and `kubectl top node`, we get the CPU and memory consumption of Pods and Nodes respectively.
 
 
 ## Draining nodes that contain Pods not managed by higher level resources
@@ -304,6 +304,16 @@ Or:
 kubectl auth can-i get pods --as USERNAME
 ```
 
+For service accounts:
+```
+kubectl auth can-i get pods --as system:serviceaccount:namespace:serviceaccountname
+```
+
+Eg:
+```
+kubectl auth can-i get pods --as system:serviceaccount:default:my-service-account
+```
+
 
 ## Network
 
@@ -413,6 +423,13 @@ If Pods fail to startup, check the following components of the `kube-system` nam
 - Check volume mounts of controller-manager to ensure the path to k8s certs on the host is correct.
 
 **NOTE:** Please take note that all the names and labels and values need the correct spelling. Otherwise the Pod will not start.
+
+
+## Debugging service reachability
+
+- Check endpoints.
+- If there are issues with reaching the DNS name of the service, check if you can reach the Cluster IP of the service.
+- Check if app is listening on 0.0.0.0/0 . If app is listening on 127.0.0.1 in the container, then we won't be able to hit it.
 
 
 ## Troubleshooting node failure
