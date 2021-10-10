@@ -3,7 +3,7 @@
 Methods to work on git repos housed on remote machines using vim, via SSH
 
 
-## sshfs
+## Method 1: sshfs
 
 On your local machine, install sshfs:
 ```
@@ -27,6 +27,18 @@ Advantages:
 Disadvantages:
 
 - For large file operations, dependent on network speed
+
+
+## Default method: work on the remote machine directly
+
+Advantages:
+
+- No indirection. What you see is what you get
+
+Disadvantages:
+
+- Likely need to setup development environment on remote
+- File editing operations subject to network speed; this may impact development experience depending on network connection
 
 
 ## References
