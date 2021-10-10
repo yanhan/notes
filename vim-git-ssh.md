@@ -30,6 +30,37 @@ Disadvantages:
 - When building / testing, need to remember to do it on the remote instead of locally
 
 
+## Method 2: Push to git remote on the server
+
+On your local machine, add the remote git repo as a git remote:
+```
+git remote add REMOTE_NAME  REMOTE_SSH_CONFIG_NAME:/full/path/to/remote/repo
+```
+
+Then work locally, and push to the remote when changes are made:
+```
+git push REMOTE_NAME BRANCH_NAME
+```
+
+If the remote repo is not a bare repo and the branch is checked out and you still want to push to it, on the remote repo, run:
+```
+git config receive.denyCurrentBranch warn
+```
+
+Advantages:
+
+- Use local filesystem
+- Use local development environment
+- Almost no configuration required on the remote end
+- No need to install any additional software. Only requires SSH and existing core git feature
+
+Disadvantages:
+
+- If the remote is not a bare repo, by default, cannot checkout the branch you will be pushing (but see above on how to allow this)
+- If remote is not bare and the branch is checked out, may need to run `git reset --hard HEAD` to see latest changes reflected
+- When building / testing, need to remember to do it on the remote instead of locally
+
+
 ## Default method: work on the remote machine directly
 
 Advantages:
