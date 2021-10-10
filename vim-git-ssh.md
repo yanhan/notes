@@ -27,6 +27,7 @@ Advantages:
 Disadvantages:
 
 - For large file operations, dependent on network speed
+- When building / testing, need to remember to do it on the remote instead of locally
 
 
 ## Default method: work on the remote machine directly
