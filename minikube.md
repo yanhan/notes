@@ -7,10 +7,10 @@ Start minikube cluster:
 minikube start
 ```
 
-To use a specific VM driver, eg. virtualbox:
+To use a specific VM driver, eg. virtualbox, and with latest stable k8s:
 
 ```
-minikube start --vm-driver=virtualbox
+minikube start --vm-driver=virtualbox --kubernetes-version=stable
 ```
 
 Get IP address of minikube:
